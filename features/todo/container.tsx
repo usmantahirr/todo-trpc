@@ -58,7 +58,7 @@ export default function TodoContainer() {
         ) : (
           <motion.div layout className="space-y-2">
             {sortedTodos.map((todo) => (
-              <TodoItem key={todo.id} todo={todo} />
+              <TodoItem key={todo._id} todo={todo} />
             ))}
           </motion.div>
         )}
