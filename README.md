@@ -20,6 +20,32 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Folder Structure
+
+```
+/
+  /app               ← Primary app
+  /components        ← Reusable UI components
+  /features          ← Feature-based separation (e.g., todo)
+    /todo
+      /api           ← tRPC routers
+      /components    ← Feature-specific UI
+      /lib           ← Utilities, model definitions
+  /server
+    /db              ← MongoDB connection & models
+    /routers         ← tRPC routers (can map to feature folders)
+  /styles            ← Tailwind config, base styles
+  /utils             ← Generic utils (e.g., classNames)
+  /types             ← Shared types
+  /tests             ← Unit tests, test utils
+  /prisma or /mongo  ← If needed for schema
+
+.env.local
+next.config.js
+tailwind.config.js
+tsconfig.json
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
