@@ -10,7 +10,7 @@
   "importOrder": [
     "<THIRD_PARTY_MODULES>",
     "(?=content|api)",
-    "@lib|@hooks|@actions",
+    "@lib|@hooks|@actions|@server",
     "@ui|@components",
     "@features",
     "@types",
