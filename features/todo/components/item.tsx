@@ -6,18 +6,18 @@ import { useState } from "react"
 
 import { cn } from "@lib/utils"
 
-import { Button } from "@ui/button"
-import { Checkbox } from "@ui/checkbox"
+import { Button, Checkbox } from "@ui"
+
+import { useTodoContext } from "@features/todo/context"
 
 import type { Todo } from "@types"
 
 interface TodoItemProps {
   todo: Todo
-  onToggle: (id: string) => void
-  onDelete: (id: string) => void
 }
 
-export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+export default function TodoItem({ todo }: TodoItemProps) {
+  const { toggleTodo, deleteTodo } = useTodoContext()
   const [isHovering, setIsHovering] = useState(false)
 
   return (
@@ -39,7 +39,7 @@ export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         <Checkbox
           id={`todo-${todo.id}`}
           checked={todo.completed}
-          onCheckedChange={() => onToggle(todo.id)}
+          onCheckedChange={() => toggleTodo(todo.id)}
           className="transition-all data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500"
         />
       </div>
@@ -59,7 +59,7 @@ export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
           "h-8 w-8 text-muted-foreground transition-all hover:text-destructive",
           !isHovering && "opacity-0 md:opacity-0",
         )}
-        onClick={() => onDelete(todo.id)}
+        onClick={() => deleteTodo(todo.id)}
         aria-label="Delete task"
       >
         <Trash2 className="h-4 w-4" />

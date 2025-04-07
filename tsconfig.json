@@ -23,11 +23,12 @@
       "@lib/*": ["./lib/*"],
       "@hooks/*": ["./hooks/*"],
       "@actions/*": ["./actions/*"],
+      "@ui": ["./components/ui"],
       "@ui/*": ["./components/ui/*"],
       "@components/*": ["./components/*"],
       "@features/*": ["./features/*"],
-      "@types/*": ["./types/*"],
       "@types": ["./types"],
+      "@types/*": ["./types/*"],
       "@server/*": ["./server/*"]
     }
   },

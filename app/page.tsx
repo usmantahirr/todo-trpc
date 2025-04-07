@@ -1,4 +1,4 @@
-import TodoApp from "@features/todo/container"
+import TodoApp from "@features/todo"
 
 export default function Home() {
   return (
