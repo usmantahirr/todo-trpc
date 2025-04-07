@@ -26,10 +26,11 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([])
   // const [loading, setLoading] = useState(true)
 
+  const { data: fetchedTodos = [] } = trpc.todo.list.useQuery()
+
   useEffect(() => {
-    const { data } = trpc.todo.list.useQuery()
-    setTodos(data || [])
-  }, [])
+    setTodos(fetchedTodos)
+  }, [fetchedTodos])
 
   const addMutation = trpc.todo.add.useMutation({
     onSuccess(todo) {
