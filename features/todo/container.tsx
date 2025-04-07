@@ -31,7 +31,7 @@ export default function TodoContainer() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6 rounded-xl border bg-card p-6 shadow-lg"
+      className="space-y-6 rounded-md border bg-card p-6 shadow-md"
     >
       <Header completedCount={completedCount} totalCount={totalCount} />
 
