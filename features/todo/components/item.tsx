@@ -37,14 +37,14 @@ export default function TodoItem({ todo }: TodoItemProps) {
     >
       <div className="flex-shrink-0">
         <Checkbox
-          id={`todo-${todo.id}`}
+          id={`todo-${todo._id}`}
           checked={todo.completed}
-          onCheckedChange={() => toggleTodo(todo.id)}
+          onCheckedChange={() => toggleTodo(todo._id)}
           className="transition-all data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500"
         />
       </div>
       <label
-        htmlFor={`todo-${todo.id}`}
+        htmlFor={`todo-${todo._id}`}
         className={cn(
           "flex-1 cursor-pointer text-sm transition-all duration-300 md:text-base",
           todo.completed && "text-muted-foreground line-through",
@@ -59,7 +59,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
           "h-8 w-8 text-muted-foreground transition-all hover:text-destructive",
           !isHovering && "opacity-0 md:opacity-0",
         )}
-        onClick={() => deleteTodo(todo.id)}
+        onClick={() => deleteTodo(todo._id)}
         aria-label="Delete task"
       >
         <Trash2 className="h-4 w-4" />

@@ -1,7 +1,7 @@
 "use client"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { httpBatchLink } from "@trpc/client"
+import { httpBatchLink, loggerLink } from "@trpc/client"
 import { ReactNode, useState } from "react"
 
 import { trpc } from "@lib/trpcClient"
@@ -13,6 +13,9 @@ export default function TRPCProvider({ children }: { children: ReactNode }) {
       links: [
         httpBatchLink({
           url: "/api/trpc",
+        }),
+        loggerLink({
+          enabled: () => true,
         }),
       ],
     }),

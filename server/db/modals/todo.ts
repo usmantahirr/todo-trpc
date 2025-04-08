@@ -1,20 +1,22 @@
-import mongoose, { Schema, Document, models } from "mongoose"
+import mongoose, { Schema, Document, Model, model } from "mongoose"
 
-export interface ITodo extends Document {
+export interface TodoDocument extends Document {
+  _id: string
   text: string
   completed: boolean
   createdAt: Date
   sessionId: string
 }
 
-const TodoSchema = new Schema<ITodo>(
-  {
-    text: { type: String, required: true },
-    completed: { type: Boolean, default: false },
-    sessionId: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
-  },
-  { timestamps: true },
-)
+export type TodoModelType = Model<TodoDocument>
 
-export const Todo = models.Todo || mongoose.model<ITodo>("Todo", TodoSchema)
+const TodoSchema = new Schema<TodoDocument, TodoModelType>({
+  text: { type: String, required: true },
+  completed: { type: Boolean, required: true, default: false },
+  sessionId: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+})
+
+export const getTodoModel = () =>
+  (mongoose.models.Todo as TodoModelType) ||
+  model<TodoDocument, TodoModelType>("Todo", TodoSchema)
