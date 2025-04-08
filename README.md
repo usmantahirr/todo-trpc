@@ -1,62 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Todo App
+
+A modern, full-stack todo application built with Next.js, TypeScript, tRPC, and MongoDB. The application allows users to create, manage, and persist their todo items across sessions.
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **API Layer**: tRPC
+- **Database**: MongoDB
+- **Styling**: Tailwind CSS
+- **State Management**: React Context
+- **Development**: Docker
+
+## Features
+
+- Create and manage todo items
+- Mark todos as complete/incomplete
+- Persistent storage using MongoDB
+- Modern, responsive UI
+- Real-time updates
+- Type-safe API with tRPC
+
+## Prerequisites
+
+- Node.js 18+
+- MongoDB (local or Atlas)
+- Docker (optional)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd todo-app
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory with the following variables:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Docker Setup (Optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To run the application using Docker:
 
-## Folder Structure
+1. Build the Docker image:
+
+```bash
+docker build -t todo-app .
+```
+
+2. Run the container:
+
+```bash
+docker run -p 3000:3000 -e MONGODB_URI=your_mongodb_connection_string todo-app
+```
+
+## Project Structure
 
 ```
 /
-  /app               ← Primary app
-  /components        ← Reusable UI components
-  /features          ← Feature-based separation (e.g., todo)
-    /todo
-      /api           ← tRPC routers
-      /components    ← Feature-specific UI
-      /lib           ← Utilities, model definitions
-  /server
-    /db              ← MongoDB connection & models
-    /routers         ← tRPC routers (can map to feature folders)
-  /styles            ← Tailwind config, base styles
-  /utils             ← Generic utils (e.g., classNames)
-  /types             ← Shared types
-  /tests             ← Unit tests, test utils
-  /prisma or /mongo  ← If needed for schema
-
-.env.local
-next.config.js
-tailwind.config.js
-tsconfig.json
+├── app/                # Next.js app router pages
+│   └── api/trpc/[trpc] # TRPC Route configs Next app router
+├── components/         # Reusable UI components
+├── features/           # Feature-based modules
+│   └── todo/           # Todo feature implementation
+│       ├── api/        # tRPC routers
+│       └── components  # Feature-specific components
+├── lib/                # Utilities and types
+├── server/             # Backend implementation
+│   └── db/             # MongoDB connection and models
+├── types/              # Shared TypeScript types
+└── public/             # Static assets
 ```
 
-## Learn More
+## Development Guidelines
 
-To learn more about Next.js, take a look at the following resources:
+- Follow TypeScript best practices
+- Use feature-based folder structure
+- Implement proper error handling
+- Write clean, maintainable code
+- Follow the established project structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
