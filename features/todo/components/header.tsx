@@ -1,8 +1,15 @@
 "use client"
 
 import { format } from "date-fns"
-import { CheckCircle2, ClipboardList, Copy, Fingerprint } from "lucide-react"
-import { useState } from "react"
+import {
+  CheckCircle2,
+  ClipboardList,
+  Copy,
+  Fingerprint,
+  Share2,
+} from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 
 import { getOrCreateSessionId } from "@lib/sessions"
 
@@ -12,8 +19,20 @@ interface HeaderProps {
 }
 
 export default function Header({ completedCount, totalCount }: HeaderProps) {
-  const [sessionId] = useState(getOrCreateSessionId())
+  const searchParams = useSearchParams()
+  const [sessionId, setSessionId] = useState<string>("")
   const [copied, setCopied] = useState(false)
+  const [shared, setShared] = useState(false)
+
+  useEffect(() => {
+    const querySessionId = searchParams.get("sessionId")
+    if (querySessionId) {
+      localStorage.setItem("sessionId", querySessionId)
+      setSessionId(querySessionId)
+    } else {
+      setSessionId(getOrCreateSessionId())
+    }
+  }, [searchParams])
 
   const handleCopy = async () => {
     if (!sessionId) return
@@ -22,6 +41,17 @@ export default function Header({ completedCount, totalCount }: HeaderProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const handleShare = async () => {
+    if (!sessionId) return
+    const url = new URL(window.location.href)
+    url.searchParams.set("sessionId", sessionId)
+    await navigator.clipboard.writeText(url.toString())
+    setShared(true)
+    setTimeout(() => setShared(false), 2000)
+  }
+
+  if (!sessionId) return null
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -29,14 +59,24 @@ export default function Header({ completedCount, totalCount }: HeaderProps) {
           <Fingerprint className="h-5 w-5 text-primary" />
           <p className="text-sm font-semibold text-foreground">{sessionId}</p>
         </div>
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-1 rounded-md border border-primary px-2 py-1 text-xs font-medium text-primary transition hover:bg-muted"
-          aria-label="Copy Session ID"
-        >
-          <Copy className="h-4 w-4" />
-          {copied ? "Copied!" : "Copy"}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-1 rounded-md border border-primary px-2 py-1 text-xs font-medium text-primary transition hover:bg-muted"
+            aria-label="Share Session"
+          >
+            <Share2 className="h-4 w-4" />
+            {shared ? "Copied!" : "Share"}
+          </button>
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-1 rounded-md border border-primary px-2 py-1 text-xs font-medium text-primary transition hover:bg-muted"
+            aria-label="Copy Session ID"
+          >
+            <Copy className="h-4 w-4" />
+            {copied ? "Copied!" : "Copy"}
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center justify-between">
