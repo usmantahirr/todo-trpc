@@ -58,21 +58,61 @@ npm run dev
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Docker Setup (Optional)
+The application is fully containerized and can be run in both production and development environments using Docker.
 
-To run the application using Docker:
+### Prerequisites:
 
-1. Build the Docker image:
+- Ensure Docker and Docker Compose are installed on your system.
+- Define environment variables:
+   - Use a `.env.local` file in the project root or define variables directly in the `docker-compose.yml` file.
+   - Example:
+     ```env
+     MONGODB_URI=mongodb+srv://<username>:<password>@your-cluster.mongodb.net/<database>?retryWrites=true&w=majority
+     ```
 
-```bash
-docker build -t todo-app .
-```
+### Running in Development Mode
 
-2. Run the container:
+1. Build the development image:
 
-```bash
-docker run -p 3000:3000 -e MONGODB_URI=your_mongodb_connection_string todo-app
-```
+   ```bash
+   docker-compose build
+   ```
 
+2. Start the development server:
+
+   ```bash
+   docker-compose up
+   ```
+
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+This setup leverages the `development` stage defined in the `Dockerfile` and mounts the project directory for live reloading.
+
+### Running in Production Mode
+
+1. Build the production image with the target set to `production`:
+
+   ```bash
+   docker build -t todo-app --target runner .
+   ```
+
+2. Run the production container:
+
+   ```bash
+   docker run -p 3000:3000 -e MONGODB_URI=mongodb+srv://<username>:<password>@your-cluster.mongodb.net/<database>?retryWrites=true&w=majority todo-app
+   ```
+
+3. Access the application at [http://localhost:3000](http://localhost:3000).
+
+### Notes
+
+- For production, ensure that sensitive environment variables (like `MONGODB_URI`) are securely managed.
+- Use the following `Dockerfile` stages as needed:
+   - **`base`**: Common Node.js base image for all stages.
+   - **`deps`**: Handles dependencies installation.
+   - **`builder`**: Builds the Next.js application.
+   - **`runner`**: A lightweight production-ready image for deployment.
+   - **`development`**: Optimized for local development with hot-reloading support.
 ## Project Structure
 
 ```
