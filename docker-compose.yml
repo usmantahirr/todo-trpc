@@ -12,7 +12,27 @@ services:
       - /app/node_modules
       - /app/.next
     environment:
-      - NODE_ENV=${NODE_ENV:-development}
+      MONGODB_URI: ${FORCE_LOCAL_MONGO:-${MONGODB_URI:-mongodb://root:root@mongo:27017/mytodoapp?authSource=admin}}
+      NODE_ENV: ${NODE_ENV:-development}
     env_file:
       - .env.local
+    depends_on:
+      - mongo
     command: ${COMMAND:-npm run dev}
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: mytodoapp
+    profiles:
+      - local-mongo
+
+volumes:
+  mongo_data:

@@ -58,61 +58,81 @@ npm run dev
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Docker Setup (Optional)
-The application is fully containerized and can be run in both production and development environments using Docker.
+The application is fully containerized, supporting both development and production environments. Follow the instructions below to configure and use Docker.
 
-### Prerequisites:
+### Prerequisites
 
-- Ensure Docker and Docker Compose are installed on your system.
-- Define environment variables:
-   - Use a `.env.local` file in the project root or define variables directly in the `docker-compose.yml` file.
-   - Example:
-     ```env
-     MONGODB_URI=mongodb+srv://<username>:<password>@your-cluster.mongodb.net/<database>?retryWrites=true&w=majority
-     ```
+Ensure the following tools are installed on your system:
+- Docker
+- Docker Compose
 
 ### Running in Development Mode
 
-1. Build the development image:
-
+1. **Create a `.env.local` file** with your MongoDB connection string (if not already present):
+    ###### Note: You will only need this if you want to use (3) remote mongo instance, local is setting it up inside `package.json` file itself  
+   ```env
+   MONGODB_URI=mongodb+srv://<username>:<password>@your-cluster.mongodb.net/<database>?retryWrites=true&w=majority
+   ```
+2. **Start the Development Environment with local mongo**:
    ```bash
-   docker-compose build
+   npm run docker:up-local-mongo
+   ```
+3. **Start the Development Environment with remote mongo**:
+   ```bash
+   npm run docker:up
    ```
 
-2. Start the development server:
+4. **Access the app locally**:
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-   ```bash
-   docker-compose up
-   ```
-
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-This setup leverages the `development` stage defined in the `Dockerfile` and mounts the project directory for live reloading.
+The development environment supports live-reloading via `nodemon` or `Next.js` hot-reloading.
 
 ### Running in Production Mode
 
-1. Build the production image with the target set to `production`:
-
+1. **Build the Production Image**:
    ```bash
    docker build -t todo-app --target runner .
    ```
 
-2. Run the production container:
-
+2. **Run the Production Container**:
    ```bash
    docker run -p 3000:3000 -e MONGODB_URI=mongodb+srv://<username>:<password>@your-cluster.mongodb.net/<database>?retryWrites=true&w=majority todo-app
    ```
 
-3. Access the application at [http://localhost:3000](http://localhost:3000).
+3. **Access the Production App**:
+   Open [http://localhost:3000](http://localhost:3000).
+
+### Using Remote MongoDB with Docker Compose
+
+1. Create or update `docker-compose.remote.yml` to handle your remote MongoDB URL:
+   ```yaml
+   version: "3.8"
+
+   services:
+     app:
+       build:
+         context: .
+         target: runner
+       ports:
+         - "3000:3000"
+       environment:
+         NODE_ENV: production
+         MONGODB_URI: your_mongodb_connection_string
+   ```
+
+2. Start the remote environment:
+   ```bash
+   docker-compose -f docker-compose.remote.yml up --build
+   ```
+
+---
 
 ### Notes
+- For production, always manage sensitive credentials (like `MONGODB_URI`) using environment secrets or a secure vault.
+- The `Dockerfile` includes support for:
+    - Lightweight **production builds** using standalone mode.
+    - Fully-featured **development builds** supporting live-reloading.
 
-- For production, ensure that sensitive environment variables (like `MONGODB_URI`) are securely managed.
-- Use the following `Dockerfile` stages as needed:
-   - **`base`**: Common Node.js base image for all stages.
-   - **`deps`**: Handles dependencies installation.
-   - **`builder`**: Builds the Next.js application.
-   - **`runner`**: A lightweight production-ready image for deployment.
-   - **`development`**: Optimized for local development with hot-reloading support.
 ## Project Structure
 
 ```

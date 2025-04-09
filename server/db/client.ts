@@ -2,6 +2,7 @@ import { ConnectOptions } from "mongodb"
 import mongoose from "mongoose"
 
 const uri = process.env.MONGODB_URI
+
 if (!uri) {
   console.error("Missing MONGODB_URI in environment variables. Exiting...")
   process.exit(1)
