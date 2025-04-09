@@ -2,7 +2,10 @@ import { ConnectOptions } from "mongodb"
 import mongoose from "mongoose"
 
 const uri = process.env.MONGODB_URI
-if (!uri) throw new Error("Missing MONGODB_URI")
+if (!uri) {
+  console.error("Missing MONGODB_URI in environment variables. Exiting...")
+  process.exit(1)
+}
 
 declare global {
   // allow global caching in dev with type safety
@@ -24,12 +27,24 @@ if (process.env.NODE_ENV === "development") {
 }
 
 export async function connectDB(): Promise<typeof mongoose> {
-  if (mongoose.connection.readyState >= 1) {
+  try {
+    if (mongoose.connection.readyState >= 1) {
+      console.log("Already connected to MongoDB.")
+      return mongoose
+    }
+
+    if (!global._mongooseClient) {
+      console.log("Connecting to MongoDB...")
+    }
+
+    await mongooseClient
+
+    console.log("Successfully connected to MongoDB.")
     return mongoose
+  } catch (error) {
+    console.error("MongoDB connection failed:", error)
+    await mongoose.disconnect()
+    console.log("Closed MongoDB connection due to failure.")
+    process.exit(1)
   }
-  if (!global._mongooseClient) {
-    console.log("🔌 Connecting to MongoDB...")
-  }
-  await mongooseClient
-  return mongoose
 }
