@@ -1,8 +1,11 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
+import { sendAllTodosCompletedEmail } from "@lib/mailer"
 import { connectDB, TodoDocument, getTodoModel } from "@server/db"
 import { publicProcedure, router } from "@server/trpc"
+
+import { checkAndNotifyAllTodosComplete } from "@features/email/checkAndNotifyAllTodosComplete"
 
 const TodoModel = getTodoModel()
 
@@ -58,10 +61,28 @@ export const todoRouter = router({
           sessionId: input.sessionId,
         }).exec()
 
-        if (!todo) throw new Error("Todo not found")
+        if (!todo) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Todo not found",
+          })
+        }
 
         todo.completed = !todo.completed
         await todo.save()
+
+        const allTodosComplete = await checkAndNotifyAllTodosComplete(
+          input.sessionId,
+        )
+
+        if (allTodosComplete) {
+          try {
+            await sendAllTodosCompletedEmail()
+          } catch (error) {
+            console.error("Failed to send completion email:", error)
+          }
+        }
+
         return todo
       } catch (error) {
         console.error("Add todo failed:", error)

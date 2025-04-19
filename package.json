@@ -8,11 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "format": "npx prettier --write .",
-
     "docker:up": "docker-compose -f docker-compose.remote.yml up --build",
     "docker:up-local-mongo": "FORCE_LOCAL_MONGO=mongodb://root:root@mongo:27017/mytodoapp?authSource=admin docker-compose --profile local-mongo up --build",
     "docker:prune": "docker system prune -af && docker volume prune -f",
-
     "dev:local": "MONGODB_URI=mongodb://root:root@mongo:27017/mytodoapp npm run dev"
   },
   "dependencies": {
@@ -27,6 +25,7 @@
     "lucide-react": "^0.487.0",
     "mongoose": "^8.13.2",
     "next": "15.1.0",
+    "nodemailer": "^6.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
@@ -37,6 +36,7 @@
     "@eslint/eslintrc": "^3",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
