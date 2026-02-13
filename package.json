@@ -8,11 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "format": "npx prettier --write .",
-
     "docker:up": "docker-compose -f docker-compose.remote.yml up --build",
     "docker:up-local-mongo": "FORCE_LOCAL_MONGO=mongodb://root:root@mongo:27017/mytodoapp?authSource=admin docker-compose --profile local-mongo up --build",
     "docker:prune": "docker system prune -af && docker volume prune -f",
-
     "dev:local": "MONGODB_URI=mongodb://root:root@mongo:27017/mytodoapp npm run dev"
   },
   "dependencies": {
@@ -26,7 +24,7 @@
     "framer-motion": "^12.6.3",
     "lucide-react": "^0.487.0",
     "mongoose": "^8.13.2",
-    "next": "15.1.0",
+    "next": "15.1.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
